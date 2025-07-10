@@ -134,11 +134,13 @@ class _WebhookConfigScreenState extends State<WebhookConfigScreen> {
                 ),
                 keyboardType: TextInputType.url,
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || value.trim().isEmpty) { // Added .trim()
                     return 'Please enter a Webhook URL';
                   }
-                  if (!Uri.tryParse(value)?.isAbsolute ?? true) {
-                     return 'Please enter a valid URL';
+                  // Corrected validation logic for absolute URI
+                  final uri = Uri.tryParse(value.trim());
+                  if (uri == null || !uri.isAbsolute) {
+                     return 'Please enter a valid, absolute URL (e.g., http://example.com)';
                   }
                   return null;
                 },
